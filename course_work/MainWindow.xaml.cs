@@ -27,6 +27,7 @@ namespace course_work
 
         }
 
+
         public DataTable Select(string selectSQL) // функция подключения к базе данных и обработка запросов
         {
             DataTable dataTable = new DataTable("dataBase");                // создаём таблицу в приложении
