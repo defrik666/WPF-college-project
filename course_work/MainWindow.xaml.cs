@@ -14,30 +14,37 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Configuration;
 
 namespace course_work
 {
     public partial class MainWindow : Window
     {
+        SqlConnection sqlConnection = null;
+
         public MainWindow()
         {
             InitializeComponent();
 
+            ConnectDB();
             testGrid.ItemsSource = LoadData();
 
         }
 
+        public void ConnectDB()
+        {
+            sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["HotelDB"].ConnectionString);
+            sqlConnection.Open();
+        }
 
         public DataTable Select(string selectSQL) // функция подключения к базе данных и обработка запросов
         {
-            DataTable dataTable = new DataTable("dataBase");                // создаём таблицу в приложении
-                                                                            // подключаемся к базе данных
-            SqlConnection sqlConnection = new SqlConnection("server=DESKTOP-8IUIQUA\\SQLEXPRESS;Trusted_Connection=Yes;DataBase=ErmakovProject;");
-            sqlConnection.Open();                                           // открываем базу данных
-            SqlCommand sqlCommand = sqlConnection.CreateCommand();          // создаём команду
-            sqlCommand.CommandText = selectSQL;                             // присваиваем команде текст
-            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand); // создаём обработчик
-            sqlDataAdapter.Fill(dataTable);                                 // возращаем таблицу с результатом
+            DataTable dataTable = new DataTable("DB");
+            SqlCommand sqlCommand = sqlConnection.CreateCommand();
+            sqlCommand.CommandText = selectSQL;
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand); 
+            sqlDataAdapter.Fill(dataTable);    
+            
             return dataTable;
         }
 
