@@ -6,22 +6,30 @@
         xmlns:local="clr-namespace:course_work"
         mc:Ignorable="d"
         
-        Title="MainWindow" Height="600" Width="1200">
+        Title="MainWindow" Height="900" Width="1600">
     
     
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="3*"></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition MaxHeight="100"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Grid Background="CadetBlue">
-            <DataGrid x:Name="testGrid" MaxWidth="1200" Margin="10 20 20 10" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
+            <DataGrid x:Name="testGrid" MaxWidth="1800" Margin="20 30 20 30" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Id}" Header="Id" IsReadOnly="True"></DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding room_type}" Header="Тип комнаты" IsReadOnly="True"></DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding room_img}" Header="Фото комнаты" IsReadOnly="True"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding roomClass}" Header="Тип комнаты" IsReadOnly="True"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding roomSize}" Header="Тип комнаты" IsReadOnly="True"></DataGridTextColumn>
+                    
+                    <DataGridTemplateColumn Header="Фото комнаты" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding photo}" MaxWidth="400" MaxHeight="200"></Image>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
