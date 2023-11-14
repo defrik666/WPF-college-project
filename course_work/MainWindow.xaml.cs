@@ -17,7 +17,6 @@ using System.Windows.Shapes;
 using System.Configuration;
 using System.Runtime.InteropServices;
 using System.IO;
-using System.Drawing;
 
 
 namespace course_work
@@ -30,7 +29,7 @@ namespace course_work
         {
             InitializeComponent();
 
-            ConnectDB();
+            //ConnectDB();
 
             //List<Rooms> rooms = new List<Rooms>();
             //DataTable dt = Select("Select * FROM rooms JOIN class ON rooms.roomClassId = class.classId JOIN size ON rooms.roomSizeId = size.sizeId");
@@ -42,36 +41,36 @@ namespace course_work
             //}
 
 
-            testGrid.ItemsSource = LoadData();
+            //testGrid.ItemsSource = LoadData();
 
         }
 
-        public void ConnectDB()
-        {
-            sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["HotelDB"].ConnectionString);
-            sqlConnection.Open();
-        }
+        //public void ConnectDB()
+        //{
+        //    sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["HotelDB"].ConnectionString);
+        //    sqlConnection.Open();
+        //}
 
-        public DataTable Select(string selectSQL) // функция подключения к базе данных и обработка запросов
-        {
-            DataTable dataTable = new DataTable("DB");
-            SqlCommand sqlCommand = sqlConnection.CreateCommand();
-            sqlCommand.CommandText = selectSQL;
-            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand); 
-            sqlDataAdapter.Fill(dataTable);    
+        //public DataTable Select(string selectSQL) // функция подключения к базе данных и обработка запросов
+        //{
+        //    DataTable dataTable = new DataTable("DB");
+        //    SqlCommand sqlCommand = sqlConnection.CreateCommand();
+        //    sqlCommand.CommandText = selectSQL;
+        //    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand); 
+        //    sqlDataAdapter.Fill(dataTable);    
             
-            return dataTable;
-        }
+        //    return dataTable;
+        //}
 
-        public DataView LoadData()
-        {
-            return Select("Select * FROM rooms JOIN class ON rooms.roomClassId = class.classId JOIN size ON rooms.roomSizeId = size.sizeId").DefaultView;
-        }
+        //public DataView LoadData()
+        //{
+        //    return Select("Select * FROM rooms JOIN class ON rooms.roomClassId = class.classId JOIN size ON rooms.roomSizeId = size.sizeId").DefaultView;
+        //}
 
-        private void Test(Rooms room)
-        {
+        //private void Test(Rooms room)
+        //{
 
-        }
+        //}
 
         //public Image byteArrayToImage(byte[] byteArrayIn)
         //{
