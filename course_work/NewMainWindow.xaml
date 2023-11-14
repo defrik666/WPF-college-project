@@ -1,4 +1,4 @@
-﻿<Window x:Class="course_work.MainWindow"
+﻿<Window x:Class="course_work.NewMainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:course_work"
         mc:Ignorable="d"
         
-        Title="MainWindow" Height="900" Width="1600">
-    
-    
+             Title="MainWindow" Height="900" Width="1600">
+
+
     <Grid>
 
         <Grid.RowDefinitions>
@@ -21,7 +21,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Class}" Header="Тип комнаты" IsReadOnly="True"></DataGridTextColumn>
                     <DataGridTextColumn Binding="{Binding Size}" Header="Тип комнаты" IsReadOnly="True"></DataGridTextColumn>
-                    
+
                     <DataGridTemplateColumn Header="Фото комнаты" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -29,11 +29,11 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    
+
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-           
+
         <Grid Background="BlanchedAlmond" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
@@ -41,13 +41,13 @@
             </Grid.ColumnDefinitions>
 
             <Button x:Name="test" MinWidth="100" MaxWidth="150" MinHeight="40" MaxHeight="50" Margin="0 0 30 0" HorizontalAlignment="Right" VerticalAlignment="Center" >
-                <Button.Content> Забранировать </Button.Content>
+                <Button.Content>Забранировать</Button.Content>
             </Button>
 
             <DatePicker Grid.Column="1" MinWidth="180" MaxWidth="300" MinHeight="30" MaxHeight="50" Margin="30 0 0 0" HorizontalAlignment="Left"  VerticalAlignment="Center">
-                
+
             </DatePicker>
-            
+
         </Grid>
     </Grid>
 </Window>

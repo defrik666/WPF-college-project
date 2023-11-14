@@ -17,7 +17,11 @@ using System.Windows.Shapes;
 using System.Configuration;
 using System.Runtime.InteropServices;
 using System.IO;
+<<<<<<< HEAD
 
+=======
+using System.Collections.ObjectModel;
+>>>>>>> c073ca36bcfd677c567f551a81f3e870c9d0732c
 
 namespace course_work
 {
@@ -31,15 +35,11 @@ namespace course_work
 
             //ConnectDB();
 
-            //List<Rooms> rooms = new List<Rooms>();
-            //DataTable dt = Select("Select * FROM rooms JOIN class ON rooms.roomClassId = class.classId JOIN size ON rooms.roomSizeId = size.sizeId");
-            //foreach (DataRow dr in dt.Rows)
-            //{
-            //    Rooms rooms1 = new Rooms() {Class = dr["roomClass"].ToString(), Size = dr["roomSize"].ToString(), };
+            ObservableCollection<Rooms> roomsColl = new ObservableCollection<Rooms>();
 
-            //    MessageBox.Show(dr["photo"].ToString());
-            //}
+            LoadData(roomsColl);
 
+            testGrid.DataContext = roomsColl;
 
             //testGrid.ItemsSource = LoadData();
 
@@ -67,32 +67,66 @@ namespace course_work
         //    return Select("Select * FROM rooms JOIN class ON rooms.roomClassId = class.classId JOIN size ON rooms.roomSizeId = size.sizeId").DefaultView;
         //}
 
+<<<<<<< HEAD
         //private void Test(Rooms room)
         //{
+=======
+        private void LoadData(ObservableCollection<Rooms> roomsColl)
+        {
+            DataTable dt = Select("Select * FROM rooms JOIN class ON rooms.roomClassId = class.classId JOIN size ON rooms.roomSizeId = size.sizeId");
+            foreach (DataRow dr in dt.Rows)
+            {
+                MessageBox.Show(EngToRus((string)dr["roomClass"]));
+
+                Rooms rooms = new Rooms() {roomId = (int)dr["roomId"], Class = EngToRus((string)dr["roomClass"]), Size = (string)dr["roomSize"], Photo = ConvertByteImage((byte[])dr["photo"]) };
+
+                roomsColl.Add(rooms);
+            }
+>>>>>>> c073ca36bcfd677c567f551a81f3e870c9d0732c
 
         //}
 
-        //public Image byteArrayToImage(byte[] byteArrayIn)
-        //{
-        //    MemoryStream ms = new MemoryStream(byteArrayIn);
-        //    Image image = new Image.
-        //    return  
-        //}
+        public BitmapImage ConvertByteImage(byte[] imageByteArray)
+        {
+            BitmapImage img = new BitmapImage();
+            using (MemoryStream memStream = new MemoryStream(imageByteArray))
+            {
+                img.BeginInit();
+                img.CacheOption = BitmapCacheOption.OnLoad;
+                img.StreamSource = memStream;
+                img.EndInit();
+                img.Freeze();
+            }
+            return img;
+        }
 
-        //public Image ByteToImage(byte[] value)
-        //{
-        //    if (value != null)
-        //    {
-        //        using (MemoryStream mStream = new MemoryStream(value)) { return Image.FromStream(mStream); }
-        //    }
-        //    else { return null; }
-        //}
+        public string EngToRus(string str)
+        {
+            switch (str.Trim())
+            {
+                case "standart":
+                    return "Стандартный";
+                case "superior":
+                    return "Улучшеный";
+                //case '':
+                //    return null;
+                //case "standart":
+                //    return "Стандартный";
+                //case "superior":
+                //    return "Улучшеный";
+                //case apartment:
+                //    return null;
+                default:
+                    return str;
+            }
+        }
 
         public class Rooms
         {
+            public int roomId {  get; set; }
             public string Class { get; set; }
             public string Size { get; set; }
-            public Image Photo { get; set; }
+            public BitmapImage Photo { get; set; }
         }
     }
 }
