@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Globalization;
 
 namespace course_work
 {
@@ -23,18 +24,18 @@ namespace course_work
 
         string connectionString;
         SqlDataAdapter adapter;
-        DataTable phonesTable;
+        DataTable roomsTable;
 
         public NewMainWindow()
         {
             InitializeComponent();
-            connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["HotelDB"].ConnectionString;
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        public void Window_Loaded(object sender, RoutedEventArgs e)
         {
             string sql = "Select * FROM rooms JOIN class ON rooms.roomClassId = class.classId JOIN size ON rooms.roomSizeId = size.sizeId";
-            phonesTable = new DataTable();
+            roomsTable = new DataTable();
             SqlConnection connection = null;
             try
             {
@@ -43,17 +44,17 @@ namespace course_work
                 adapter = new SqlDataAdapter(command);
 
                 // установка команды на добавление для вызова хранимой процедуры
-                adapter.InsertCommand = new SqlCommand("sp_InsertPhone", connection);
+                adapter.InsertCommand = new SqlCommand("sp_InsertRooms", connection);
                 adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@title", SqlDbType.NVarChar, 50, "Title"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@company", SqlDbType.NVarChar, 50, "Company"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@price", SqlDbType.Int, 0, "Price"));
-                SqlParameter parameter = adapter.InsertCommand.Parameters.Add("@Id", SqlDbType.Int, 0, "Id");
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@photo", SqlDbType.Image, 0, "Photo"));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@roomClass", SqlDbType.Int, 0, "Class"));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@roomSize", SqlDbType.Int, 0, "Size"));
+                SqlParameter parameter = adapter.InsertCommand.Parameters.Add("@roomId", SqlDbType.Int, 0, "roomId");
                 parameter.Direction = ParameterDirection.Output;
 
                 connection.Open();
-                adapter.Fill(phonesTable);
-                testGrid.ItemsSource = phonesTable.DefaultView;
+                adapter.Fill(roomsTable);
+                testGrid.ItemsSource = roomsTable.DefaultView;
             }
             catch (Exception ex)
             {
@@ -61,15 +62,14 @@ namespace course_work
             }
             finally
             {
-                if (connection != null)
-                    connection.Close();
+                connection?.Close();
             }
         }
 
         private void UpdateDB()
         {
             SqlCommandBuilder comandbuilder = new SqlCommandBuilder(adapter);
-            adapter.Update(phonesTable);
+            adapter.Update(roomsTable);
         }
 
         private void updateButton_Click(object sender, RoutedEventArgs e)
@@ -79,11 +79,11 @@ namespace course_work
 
         private void deleteButton_Click(object sender, RoutedEventArgs e)
         {
-            if (phonesGrid.SelectedItems != null)
+            if (testGrid.SelectedItems != null)
             {
-                for (int i = 0; i < phonesGrid.SelectedItems.Count; i++)
+                for (int i = 0; i < testGrid.SelectedItems.Count; i++)
                 {
-                    DataRowView datarowView = phonesGrid.SelectedItems[i] as DataRowView;
+                    DataRowView datarowView = testGrid.SelectedItems[i] as DataRowView;
                     if (datarowView != null)
                     {
                         DataRow dataRow = (DataRow)datarowView.Row;
@@ -93,6 +93,8 @@ namespace course_work
             }
             UpdateDB();
         }
+
+        
     }
 }
-}
+

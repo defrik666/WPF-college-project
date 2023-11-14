@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:course_work"
         mc:Ignorable="d"
         
-        Title="MainWindow" Height="900" Width="1600">
+        Title="MainWindow" Height="900" Width="1600" Loaded="Window_Loaded">
     
     
     <Grid>
@@ -20,7 +20,7 @@
             <DataGrid x:Name="testGrid" MaxWidth="1800" Margin="20 30 20 30" ItemsSource="{Binding}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Class}" Header="Тип комнаты" IsReadOnly="True"></DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding Size}" Header="Тип комнаты" IsReadOnly="True"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Size}" Header="Размер комнаты" IsReadOnly="True"></DataGridTextColumn>
                     
                     <DataGridTemplateColumn Header="Фото комнаты" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
@@ -40,7 +40,7 @@
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Button x:Name="test" MinWidth="100" MaxWidth="150" MinHeight="40" MaxHeight="50" Margin="0 0 30 0" HorizontalAlignment="Right" VerticalAlignment="Center" >
+            <Button x:Name="test" MinWidth="100" MaxWidth="150" MinHeight="40" MaxHeight="50" Margin="0 0 30 0" HorizontalAlignment="Right" VerticalAlignment="Center" Click="Window_Loaded">
                 <Button.Content> Забранировать </Button.Content>
             </Button>
 

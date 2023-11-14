@@ -28,7 +28,7 @@ namespace course_work
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
             ConnectDB();
-            DataTable dt = Select("Select * FROM rooms JOIN class ON rooms.roomClassId = class.classId JOIN size ON rooms.roomSizeId = size.sizeId");
+            //DataTable dt = Select("Select * FROM rooms JOIN class ON rooms.roomClassId = class.classId JOIN size ON rooms.roomSizeId = size.sizeId");
 
 
         }
