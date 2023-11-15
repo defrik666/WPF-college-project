@@ -16,7 +16,7 @@ namespace course_work
             {
                 return DbToDt((string)value);
             }
-            throw new NotImplementedException();
+            return value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -25,7 +25,7 @@ namespace course_work
             {
                 return DtToDb((string)value);
             }
-            throw new NotImplementedException();
+            return value;
         }
 
         public string DbToDt(string str)

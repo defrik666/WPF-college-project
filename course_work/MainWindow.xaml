@@ -8,23 +8,24 @@
         
         Title="MainWindow" Height="900" Width="1600" Loaded="Window_Loaded">
 
-        <Window.Resources>
+    <Window.Resources>
         <local:RoomClassConverter x:Key="RoomClassConverter" />
         <local:RoomSizeConverter x:Key="RoomSizeConverter" />
     </Window.Resources>
     
-        <Grid>
+    <Grid>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="5*"></RowDefinition>
-            <RowDefinition MaxHeight="100"></RowDefinition>
-        </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5*"></RowDefinition>
+                <RowDefinition MaxHeight="100"></RowDefinition>
+            </Grid.RowDefinitions>
 
-        <Grid Background="CadetBlue">
-            <DataGrid x:Name="testGrid" MaxWidth="1800" Margin="20 30 20 30" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" RowBackground="#e5e6dc" SelectionMode="Single">
+            <Grid Background="CadetBlue">
+
+            <DataGrid x:Name="testGrid" MaxWidth="1800" Margin="20 30 20 30" AutoGenerateColumns="False" CanUserAddRows="True" CanUserDeleteRows="False" RowBackground="#98e5fe" SelectionMode="Single">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding room_class, Converter = {StaticResource RoomClassConverter}}" Header="Тип комнаты" IsReadOnly="True"></DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding room_size, Converter = {StaticResource RoomSizeConverter}}" Header="Размер комнаты" IsReadOnly="True"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding room_class, Converter = {StaticResource RoomClassConverter}}" Header="Тип комнаты"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding room_size, Converter = {StaticResource RoomSizeConverter}}" Header="Размер комнаты"></DataGridTextColumn>
 
                     <DataGridTemplateColumn Header="Фото комнаты" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
@@ -44,11 +45,16 @@
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Button x:Name="test" MinWidth="100" MaxWidth="150" MinHeight="40" MaxHeight="50" Margin="0 0 30 0" HorizontalAlignment="Right" VerticalAlignment="Center" >
-                <Button.Content>Забранировать</Button.Content>
+            <Button x:Name="test" MinWidth="100" MaxWidth="150" MinHeight="40" MaxHeight="50" Margin="0 0 30 0" HorizontalAlignment="Right" VerticalAlignment="Center" Click="UpdateButton_Click">
+                <Button.Content>Обновить</Button.Content>
             </Button>
 
-            <DatePicker Grid.Column="1" MinWidth="180" MaxWidth="300" MinHeight="30" MaxHeight="50" Margin="30 0 0 0" HorizontalAlignment="Left"  VerticalAlignment="Center">
+            <Button x:Name="test2" MinWidth="100" MaxWidth="150" MinHeight="40" MaxHeight="50" Margin="0 0 200 0" HorizontalAlignment="Right" VerticalAlignment="Center" Click="DeleteButton_Click">
+                <Button.Content>Удалить</Button.Content>
+            </Button>
+
+
+            <DatePicker Grid.Column="1" MinWidth="180" MaxWidth="300" MinHeight="30" MaxHeight="50" Margin="30 0 0 0" HorizontalAlignment="Left"  VerticalAlignment="Center" >
 
             </DatePicker>
 

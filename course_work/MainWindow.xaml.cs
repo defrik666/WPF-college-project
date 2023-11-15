@@ -15,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Globalization;
+using System.Drawing;
+using System.Windows.Controls.Primitives;
 
 namespace course_work
 {
@@ -28,27 +30,29 @@ namespace course_work
 
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent();  
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             connectionString = ConfigurationManager.ConnectionStrings["HotelDB"].ConnectionString;
         }
 
         public void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            string sql = "Select * FROM rooms JOIN class ON rooms.room_class_id = class.class_id JOIN size ON rooms.room_size_id = size.size_id";
-            roomsTable = new DataTable();
-            SqlConnection connection = null;
+            //string sql = "Select * FROM rooms JOIN class ON rooms.room_class_id = class.class_id JOIN size ON rooms.room_size_id = size.size_id";
+            string sql = "SELECT photo, (SELECT room_class FROM class WHERE room_class_id = class_id) as room_class,(SELECT room_size FROM size WHERE room_size_id = size_id) as room_size FROM rooms";
+        roomsTable = new DataTable();
+        SqlConnection connection = null;
             try
             {
                 connection = new SqlConnection(connectionString);
-                SqlCommand command = new SqlCommand(sql, connection);
-                adapter = new SqlDataAdapter(command);
+        SqlCommand command = new SqlCommand(sql, connection);
+        adapter = new SqlDataAdapter(command);
 
-                // установка команды на добавление для вызова хранимой процедуры
+        // установка команды на добавление для вызова хранимой процедуры
                 adapter.InsertCommand = new SqlCommand("sp_InsertRooms", connection);
                 adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@photo", SqlDbType.Image, 0, "Photo"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@roomClass", SqlDbType.Int, 0, "Class"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@roomSize", SqlDbType.Int, 0, "Size"));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@photo", SqlDbType.Image, 0, "photo"));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@roomClass", SqlDbType.NChar, 10, "room_class"));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@roomSize", SqlDbType.NChar, 10, "room_size"));
                 SqlParameter parameter = adapter.InsertCommand.Parameters.Add("@roomId", SqlDbType.Int, 0, "roomId");
                 parameter.Direction = ParameterDirection.Output;
 
@@ -69,7 +73,8 @@ namespace course_work
         private void UpdateDB()
         {
             SqlCommandBuilder comandbuilder = new SqlCommandBuilder(adapter);
-            adapter.Update(roomsTable);
+            MessageBox.Show(adapter.Update(roomsTable).ToString());
+            //adapter.Update(roomsTable);
         }
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
@@ -95,6 +100,7 @@ namespace course_work
         }
 
         
+
     }
 }
 

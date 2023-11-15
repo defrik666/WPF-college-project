@@ -1,0 +1,1 @@
+﻿SELECT photo, (SELECT room_class FROM class WHERE room_class_id = class_id) as room_class,(SELECT room_size FROM size WHERE room_size_id = size_id) as room_size FROM rooms
