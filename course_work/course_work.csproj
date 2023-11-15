@@ -72,6 +72,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="PhotoConcertert.cs" />
     <Compile Include="RoomSizeConverter.cs" />
     <Page Include="LoginWindow.xaml">
       <SubType>Designer</SubType>

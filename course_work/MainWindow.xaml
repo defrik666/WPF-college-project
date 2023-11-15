@@ -20,7 +20,7 @@
                 <RowDefinition MaxHeight="100"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Grid Background="CadetBlue">
+        <Grid Background="CadetBlue">
 
             <DataGrid x:Name="testGrid" MaxWidth="1800" Margin="20 30 20 30" AutoGenerateColumns="False" CanUserAddRows="True" CanUserDeleteRows="False" RowBackground="#98e5fe" SelectionMode="Single">
                 <DataGrid.Columns>
@@ -40,24 +40,31 @@
         </Grid>
 
         <Grid Background="BlanchedAlmond" Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-            </Grid.ColumnDefinitions>
 
-            <Button x:Name="test" MinWidth="100" MaxWidth="150" MinHeight="40" MaxHeight="50" Margin="0 0 30 0" HorizontalAlignment="Right" VerticalAlignment="Center" Click="UpdateButton_Click">
-                <Button.Content>Обновить</Button.Content>
-            </Button>
+            <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 30 0">
+                    <TextBlock Text="Начало"></TextBlock>
 
-            <Button x:Name="test2" MinWidth="100" MaxWidth="150" MinHeight="40" MaxHeight="50" Margin="0 0 200 0" HorizontalAlignment="Right" VerticalAlignment="Center" Click="DeleteButton_Click">
-                <Button.Content>Удалить</Button.Content>
-            </Button>
+                    <DatePicker x:Name="dateStart" MinWidth="180" MaxWidth="300" MinHeight="10" MaxHeight="50" Margin="0 10 0 0"   >
+
+                    </DatePicker>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="30 0 0 0">
+                    <TextBlock Text="Конец"></TextBlock>
+
+                    <DatePicker x:Name="dateEnd" MinWidth="180" MaxWidth="300" MinHeight="10" MaxHeight="50" Margin="0 10 0 0">
+
+                    </DatePicker>
+                </StackPanel>
+            </WrapPanel>
+            
 
 
-            <DatePicker Grid.Column="1" MinWidth="180" MaxWidth="300" MinHeight="30" MaxHeight="50" Margin="30 0 0 0" HorizontalAlignment="Left"  VerticalAlignment="Center" >
 
-            </DatePicker>
+
 
         </Grid>
     </Grid>
+    
 </Window>

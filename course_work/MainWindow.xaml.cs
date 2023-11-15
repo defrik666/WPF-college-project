@@ -17,13 +17,14 @@ using System.Windows.Shapes;
 using System.Globalization;
 using System.Drawing;
 using System.Windows.Controls.Primitives;
+using System.Data.Common;
+using System.Security.Cryptography.X509Certificates;
 
 namespace course_work
 {
 
     public partial class MainWindow : Window
     {
-
         string connectionString;
         SqlDataAdapter adapter;
         DataTable roomsTable;
@@ -38,23 +39,34 @@ namespace course_work
         public void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //string sql = "Select * FROM rooms JOIN class ON rooms.room_class_id = class.class_id JOIN size ON rooms.room_size_id = size.size_id";
-            string sql = "SELECT photo, (SELECT room_class FROM class WHERE room_class_id = class_id) as room_class,(SELECT room_size FROM size WHERE room_size_id = size_id) as room_size FROM rooms";
-        roomsTable = new DataTable();
-        SqlConnection connection = null;
+            string sql = "SELECT room_id, photo, (SELECT room_class FROM class WHERE room_class_id = class_id) as room_class,(SELECT room_size FROM size WHERE room_size_id = size_id) as room_size FROM rooms";
+            roomsTable = new DataTable();
+            SqlConnection connection = null;
             try
             {
                 connection = new SqlConnection(connectionString);
-        SqlCommand command = new SqlCommand(sql, connection);
-        adapter = new SqlDataAdapter(command);
+                SqlCommand command = new SqlCommand(sql, connection);
+                adapter = new SqlDataAdapter(command);
 
-        // установка команды на добавление для вызова хранимой процедуры
+                // установка команды на добавление для вызова хранимой процедуры
                 adapter.InsertCommand = new SqlCommand("sp_InsertRooms", connection);
                 adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
                 adapter.InsertCommand.Parameters.Add(new SqlParameter("@photo", SqlDbType.Image, 0, "photo"));
                 adapter.InsertCommand.Parameters.Add(new SqlParameter("@roomClass", SqlDbType.NChar, 10, "room_class"));
                 adapter.InsertCommand.Parameters.Add(new SqlParameter("@roomSize", SqlDbType.NChar, 10, "room_size"));
-                SqlParameter parameter = adapter.InsertCommand.Parameters.Add("@roomId", SqlDbType.Int, 0, "roomId");
+                SqlParameter parameter = adapter.InsertCommand.Parameters.Add("@roomId", SqlDbType.Int, 0, "room_id");
                 parameter.Direction = ParameterDirection.Output;
+
+                adapter.DeleteCommand = new SqlCommand("sp_DeleteRooms", connection);
+                adapter.DeleteCommand.CommandType = CommandType.StoredProcedure;
+                adapter.DeleteCommand.Parameters.Add(new SqlParameter("@roomId", SqlDbType.Int, 0, "room_id"));
+
+                adapter.UpdateCommand = new SqlCommand("sp_UpdateRooms", connection);
+                adapter.UpdateCommand.CommandType = CommandType.StoredProcedure;
+                adapter.UpdateCommand.Parameters.Add(new SqlParameter("@roomId", SqlDbType.Int, 0, "room_id"));
+                adapter.UpdateCommand.Parameters.Add(new SqlParameter("@photo", SqlDbType.Image, 0, "photo"));
+                adapter.UpdateCommand.Parameters.Add(new SqlParameter("@roomClass", SqlDbType.NChar, 10, "room_class"));
+                adapter.UpdateCommand.Parameters.Add(new SqlParameter("@roomSize", SqlDbType.NChar, 10, "room_size"));
 
                 connection.Open();
                 adapter.Fill(roomsTable);
@@ -72,9 +84,7 @@ namespace course_work
 
         private void UpdateDB()
         {
-            SqlCommandBuilder comandbuilder = new SqlCommandBuilder(adapter);
-            MessageBox.Show(adapter.Update(roomsTable).ToString());
-            //adapter.Update(roomsTable);
+            adapter.Update(roomsTable);
         }
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
@@ -96,11 +106,9 @@ namespace course_work
                     }
                 }
             }
+
             UpdateDB();
         }
-
-        
-
     }
 }
 
