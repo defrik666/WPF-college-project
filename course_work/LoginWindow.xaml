@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:course_work"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="220" Width="300">
+        Title="LoginWindow" Height="220" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+    
     <Grid Background="AliceBlue">
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock > Логин</TextBlock>

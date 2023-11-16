@@ -21,30 +21,59 @@ namespace course_work
 {
     public partial class LoginWindow : Window
     {
-        SqlConnection sqlConnection = null;
+        string connectionString;
+        SqlDataAdapter adapter;
+        string privilege;
 
         public LoginWindow()
         {
-            WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
-            ConnectDB();
-            //DataTable dt = Select("Select * FROM rooms JOIN class ON rooms.roomClassId = class.classId JOIN size ON rooms.roomSizeId = size.sizeId");
-
-
+            connectionString = ConfigurationManager.ConnectionStrings["HotelDB"].ConnectionString;
+        }
+        public void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            SqlConnection connection = null;
+            try
+            {
+                connection = new SqlConnection(connectionString);
+                adapter = new SqlDataAdapter();
+                adapter.SelectCommand = new SqlCommand("sp_SelectUsers", connection);
+                adapter.SelectCommand.CommandType = CommandType.StoredProcedure;
+                adapter.SelectCommand.Parameters.Add(new SqlParameter("@username", SqlDbType.NChar, 20));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                connection?.Close();
+            }
         }
 
-
-        public bool Login(User user)
+        public bool Login(string username, string password)
         {
+            DataSet dataSet = new DataSet();
+            adapter.SelectCommand.Parameters["@username"].Value = username;
+            adapter.Fill(dataSet);
+            if (dataSet.Tables[0].Rows.Count == 0)
+            {
+                return false;
+            }
+            if (dataSet.Tables[0].Rows[0]["password"].ToString().Trim() == password.Trim())
+            {
+                privilege = dataSet.Tables[0].Rows[0]["privilege"].ToString().Trim();
+                return true;
+            }
 
             return false;
         }
 
         public void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            User user = new User() { Username = UsernameBox.Text, Password = PasswordBox.Text};
 
-            if (Login(user))
+
+            if (Login(UsernameBox.Text, PasswordBox.Text))
             {
                 OpenMainWindow();
                 this.Close();
@@ -58,34 +87,16 @@ namespace course_work
         public void OpenMainWindow()
         {
             MainWindow mainWindow = new MainWindow();
+            if(privilege == "user")
+            {
 
-            mainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
+            else if(privilege == "admin")
+            {
 
+            }
             mainWindow.Show();
         }
 
-        public void ConnectDB()
-        {
-            sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["HotelDB"].ConnectionString);
-            sqlConnection.Open();
-        }
-
-        public DataTable Select() // функция подключения к базе данных и обработка запросов
-        {
-            DataTable dataTable = new DataTable("DB");
-            SqlCommand sqlCommand = sqlConnection.CreateCommand();
-            sqlCommand.CommandText = "Select * FROM users";
-            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
-            sqlDataAdapter.Fill(dataTable);
-
-            return dataTable;
-        }
-
-
-        public class User
-        {
-            public string Username {  get; set; }
-            public string Password { get; set; }
-        }
     }
 }

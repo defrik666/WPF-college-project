@@ -32,23 +32,23 @@ namespace course_work
         public MainWindow()
         {
             InitializeComponent();  
-            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             connectionString = ConfigurationManager.ConnectionStrings["HotelDB"].ConnectionString;
         }
 
         public void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //string sql = "Select * FROM rooms JOIN class ON rooms.room_class_id = class.class_id JOIN size ON rooms.room_size_id = size.size_id";
-            string sql = "SELECT room_id, photo, (SELECT room_class FROM class WHERE room_class_id = class_id) as room_class,(SELECT room_size FROM size WHERE room_size_id = size_id) as room_size FROM rooms";
             roomsTable = new DataTable();
             SqlConnection connection = null;
             try
             {
                 connection = new SqlConnection(connectionString);
-                SqlCommand command = new SqlCommand(sql, connection);
-                adapter = new SqlDataAdapter(command);
+                adapter = new SqlDataAdapter();
 
-                // установка команды на добавление для вызова хранимой процедуры
+                //Добавление SELECT команды
+                adapter.SelectCommand = new SqlCommand("sp_SelectRooms", connection);
+                adapter.SelectCommand.CommandType = CommandType.StoredProcedure;
+
+                //Добавление INSERT команды
                 adapter.InsertCommand = new SqlCommand("sp_InsertRooms", connection);
                 adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
                 adapter.InsertCommand.Parameters.Add(new SqlParameter("@photo", SqlDbType.Image, 0, "photo"));
@@ -57,10 +57,12 @@ namespace course_work
                 SqlParameter parameter = adapter.InsertCommand.Parameters.Add("@roomId", SqlDbType.Int, 0, "room_id");
                 parameter.Direction = ParameterDirection.Output;
 
+                //Добавление DELETE команды
                 adapter.DeleteCommand = new SqlCommand("sp_DeleteRooms", connection);
                 adapter.DeleteCommand.CommandType = CommandType.StoredProcedure;
                 adapter.DeleteCommand.Parameters.Add(new SqlParameter("@roomId", SqlDbType.Int, 0, "room_id"));
 
+                //Добавление UPDATE команды
                 adapter.UpdateCommand = new SqlCommand("sp_UpdateRooms", connection);
                 adapter.UpdateCommand.CommandType = CommandType.StoredProcedure;
                 adapter.UpdateCommand.Parameters.Add(new SqlParameter("@roomId", SqlDbType.Int, 0, "room_id"));
@@ -96,7 +98,7 @@ namespace course_work
         {
             if (testGrid.SelectedItems != null)
             {
-                for (int i = 0; i < testGrid.SelectedItems.Count; i++)
+                for (int i = testGrid.SelectedItems.Count-1; i >= 0; i--)
                 {
                     DataRowView datarowView = testGrid.SelectedItems[i] as DataRowView;
                     if (datarowView != null)
@@ -106,9 +108,10 @@ namespace course_work
                     }
                 }
             }
-
             UpdateDB();
         }
+
+
     }
 }
 

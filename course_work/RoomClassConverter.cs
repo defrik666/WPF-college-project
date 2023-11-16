@@ -40,7 +40,7 @@ namespace course_work
                    return "Апартаменты";
                 case "studio":
                     return "Студия";
-                case "suit":
+                case "suite":
                     return "Презедентский";
                 default:
                     return str;
@@ -80,9 +80,9 @@ namespace course_work
                 case "stu":
                     return "studio";
                 case "люкс":
-                    return "suit";
+                    return "suite";
                 case "su":
-                    return "suit";
+                    return "suite";
                 default:
                     return str.Trim().ToLower();
             }
