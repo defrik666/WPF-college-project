@@ -18,7 +18,6 @@ using System.Globalization;
 using System.Drawing;
 using System.Windows.Controls.Primitives;
 using System.Data.Common;
-using System.Security.Cryptography.X509Certificates;
 
 namespace course_work
 {
@@ -26,7 +25,7 @@ namespace course_work
     public partial class MainWindow : Window
     {
         string connectionString;
-        SqlDataAdapter adapter;
+        SqlDataAdapter roomsAdapter;
         DataTable roomsTable;
 
         public MainWindow()
@@ -42,37 +41,37 @@ namespace course_work
             try
             {
                 connection = new SqlConnection(connectionString);
-                adapter = new SqlDataAdapter();
+                roomsAdapter = new SqlDataAdapter();
 
                 //Добавление SELECT команды
-                adapter.SelectCommand = new SqlCommand("sp_SelectRooms", connection);
-                adapter.SelectCommand.CommandType = CommandType.StoredProcedure;
+                roomsAdapter.SelectCommand = new SqlCommand("sp_SelectRooms", connection);
+                roomsAdapter.SelectCommand.CommandType = CommandType.StoredProcedure;
 
                 //Добавление INSERT команды
-                adapter.InsertCommand = new SqlCommand("sp_InsertRooms", connection);
-                adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@photo", SqlDbType.Image, 0, "photo"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@roomClass", SqlDbType.NChar, 10, "room_class"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@roomSize", SqlDbType.NChar, 10, "room_size"));
-                SqlParameter parameter = adapter.InsertCommand.Parameters.Add("@roomId", SqlDbType.Int, 0, "room_id");
+                roomsAdapter.InsertCommand = new SqlCommand("sp_InsertRooms", connection);
+                roomsAdapter.InsertCommand.CommandType = CommandType.StoredProcedure;
+                roomsAdapter.InsertCommand.Parameters.Add(new SqlParameter("@photo", SqlDbType.Image, 0, "photo"));
+                roomsAdapter.InsertCommand.Parameters.Add(new SqlParameter("@roomClass", SqlDbType.NChar, 10, "room_class"));
+                roomsAdapter.InsertCommand.Parameters.Add(new SqlParameter("@roomSize", SqlDbType.NChar, 10, "room_size"));
+                SqlParameter parameter = roomsAdapter.InsertCommand.Parameters.Add("@roomId", SqlDbType.Int, 0, "room_id");
                 parameter.Direction = ParameterDirection.Output;
 
                 //Добавление DELETE команды
-                adapter.DeleteCommand = new SqlCommand("sp_DeleteRooms", connection);
-                adapter.DeleteCommand.CommandType = CommandType.StoredProcedure;
-                adapter.DeleteCommand.Parameters.Add(new SqlParameter("@roomId", SqlDbType.Int, 0, "room_id"));
+                roomsAdapter.DeleteCommand = new SqlCommand("sp_DeleteRooms", connection);
+                roomsAdapter.DeleteCommand.CommandType = CommandType.StoredProcedure;
+                roomsAdapter.DeleteCommand.Parameters.Add(new SqlParameter("@roomId", SqlDbType.Int, 0, "room_id"));
 
                 //Добавление UPDATE команды
-                adapter.UpdateCommand = new SqlCommand("sp_UpdateRooms", connection);
-                adapter.UpdateCommand.CommandType = CommandType.StoredProcedure;
-                adapter.UpdateCommand.Parameters.Add(new SqlParameter("@roomId", SqlDbType.Int, 0, "room_id"));
-                adapter.UpdateCommand.Parameters.Add(new SqlParameter("@photo", SqlDbType.Image, 0, "photo"));
-                adapter.UpdateCommand.Parameters.Add(new SqlParameter("@roomClass", SqlDbType.NChar, 10, "room_class"));
-                adapter.UpdateCommand.Parameters.Add(new SqlParameter("@roomSize", SqlDbType.NChar, 10, "room_size"));
+                roomsAdapter.UpdateCommand = new SqlCommand("sp_UpdateRooms", connection);
+                roomsAdapter.UpdateCommand.CommandType = CommandType.StoredProcedure;
+                roomsAdapter.UpdateCommand.Parameters.Add(new SqlParameter("@roomId", SqlDbType.Int, 0, "room_id"));
+                roomsAdapter.UpdateCommand.Parameters.Add(new SqlParameter("@photo", SqlDbType.Image, 0, "photo"));
+                roomsAdapter.UpdateCommand.Parameters.Add(new SqlParameter("@roomClass", SqlDbType.NChar, 10, "room_class"));
+                roomsAdapter.UpdateCommand.Parameters.Add(new SqlParameter("@roomSize", SqlDbType.NChar, 10, "room_size"));
 
                 connection.Open();
-                adapter.Fill(roomsTable);
-                testGrid.ItemsSource = roomsTable.DefaultView;
+                roomsAdapter.Fill(roomsTable);
+                roomGrid.ItemsSource = roomsTable.DefaultView;
             }
             catch (Exception ex)
             {
@@ -84,31 +83,31 @@ namespace course_work
             }
         }
 
-        private void UpdateDB()
+        private void UpdateDB(SqlDataAdapter adapter)
         {
             adapter.Update(roomsTable);
         }
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
-            UpdateDB();
+            UpdateDB(roomsAdapter);
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            if (testGrid.SelectedItems != null)
+            if (roomGrid.SelectedItems != null)
             {
-                for (int i = testGrid.SelectedItems.Count-1; i >= 0; i--)
+                for (int i = roomGrid.SelectedItems.Count-1; i >= 0; i--)
                 {
-                    DataRowView datarowView = testGrid.SelectedItems[i] as DataRowView;
+                    DataRowView datarowView = roomGrid.SelectedItems[i] as DataRowView;
                     if (datarowView != null)
                     {
-                        DataRow dataRow = (DataRow)datarowView.Row;
+                        DataRow dataRow = datarowView.Row;
                         dataRow.Delete();
                     }
                 }
             }
-            UpdateDB();
+            UpdateDB(roomsAdapter);
         }
 
 

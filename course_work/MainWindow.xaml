@@ -22,21 +22,32 @@
 
         <Grid Background="CadetBlue">
 
-            <DataGrid x:Name="testGrid" MaxWidth="1800" Margin="20 30 20 30" AutoGenerateColumns="False" CanUserAddRows="True" CanUserDeleteRows="False" RowBackground="#98e5fe" SelectionMode="Extended">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding room_class, Converter = {StaticResource RoomClassConverter}}" Header="Тип комнаты"></DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding room_size, Converter = {StaticResource RoomSizeConverter}}" Header="Размер комнаты"></DataGridTextColumn>
+            <TabControl MinHeight="500" MaxHeight="1200" MaxWidth="1800" Margin="20 30 20 30" >
+                <TabItem Header="Комнаты">
+                    <DataGrid x:Name="roomGrid"  AutoGenerateColumns="False" CanUserAddRows="True" CanUserDeleteRows="False" RowBackground="#98e5fe" SelectionMode="Extended">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding room_class, Converter = {StaticResource RoomClassConverter}}" Header="Тип комнаты"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding room_size, Converter = {StaticResource RoomSizeConverter}}" Header="Размер комнаты"></DataGridTextColumn>
 
-                    <DataGridTemplateColumn Header="Фото комнаты" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Image Source="{Binding photo}" MaxWidth="400" MaxHeight="200"></Image>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Фото комнаты" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Source="{Binding photo}" MaxWidth="400" MaxHeight="200"></Image>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
-                </DataGrid.Columns>
-            </DataGrid>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="Бронь">
+                    <DataGrid>
+                        
+                    </DataGrid>
+                </TabItem>
+            </TabControl>
+
+            
         </Grid>
 
         <Grid Background="BlanchedAlmond" Grid.Row="1">
