@@ -7,76 +7,312 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         
-        Title="MainWindow" Height="900" Width="1600" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+        Title="MainWindow"
+        Height="900"
+        Width="1600"
+        WindowStyle="None"
+        Background="Transparent"
+        AllowsTransparency="True"   
+        MouseDown="Window_MouseDown"
+        WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
-        <local:RoomClassConverter x:Key="RoomClassConverter" />
-        <local:RoomSizeConverter x:Key="RoomSizeConverter" />
+        <local:RoomClassConverter x:Key="classConverter" />
+        <local:RoomSizeConverter x:Key="sizeConverter" />
+        <local:RoomPriceConverter x:Key="priceConverter" />
     </Window.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="5*"></RowDefinition>
-            <RowDefinition MaxHeight="100"></RowDefinition>
-        </Grid.RowDefinitions>
+    <Border CornerRadius="19"
+        BorderThickness="1.2">
 
-        <Grid Background="CadetBlue">
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#d3bba3" Offset="0" />
+                <GradientStop Color="#d3c0a3" Offset="1" />
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+        <Border.Background>
+            <RadialGradientBrush GradientOrigin="0,0.5" SpreadMethod="Pad" RadiusX="1" RadiusY="4">
+                <GradientStop Color="#830505" Offset="0"/>
+                <GradientStop Color="#c18c74" Offset="0.3"/>
+                <GradientStop Color="#c18c74" Offset="0.4"/>
+                <GradientStop Color="#FF0C1359" Offset="0.6"/>
+                <GradientStop Color="#FF0C1359" Offset="0.9"/>
+            </RadialGradientBrush>
+        </Border.Background>
 
-            <TabControl MinHeight="500" MaxHeight="1200" MaxWidth="1800" Margin="20 30 20 30" >
-                <TabItem Header="Комнаты">
-                    <DataGrid x:Name="roomGrid"  AutoGenerateColumns="False" CanUserAddRows="True" CanUserDeleteRows="False" RowBackground="#98e5fe" SelectionMode="Extended">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding room_class, Converter = {StaticResource RoomClassConverter}}" Header="Тип комнаты"></DataGridTextColumn>
-                            <DataGridTextColumn Binding="{Binding room_size, Converter = {StaticResource RoomSizeConverter}}" Header="Размер комнаты"></DataGridTextColumn>
+        <Grid>
 
-                            <DataGridTemplateColumn Header="Фото комнаты" IsReadOnly="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Image Source="{Binding photo}" MaxWidth="400" MaxHeight="200"></Image>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="5*"/>
+                <RowDefinition MaxHeight="120"/>
+            </Grid.RowDefinitions>
 
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </TabItem>
-                <TabItem Header="Бронь">
-                    <DataGrid>
-                        
-                    </DataGrid>
-                </TabItem>
-            </TabControl>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="25" />
+                    <ColumnDefinition Width="25" />
+                    <ColumnDefinition Width="8" />
+                </Grid.ColumnDefinitions>
 
+                <TextBlock Text="Бронирование" 
+                               Foreground="#d2bba2"
+                               FontSize="20"
+                               FontFamily="Monteserrat"
+                               Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Margin="10,0,0,0" />
+
+                <Button x:Name="btnMinimize"
+                            BorderThickness="0"
+                            Content="–"
+                            Foreground="White"
+                            FontSize="16"
+                            FontFamily="Monteserrat"
+                            Cursor="Hand"
+                            Grid.Column="1"
+                            Click="BtnMinimize_Click">
+
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#545a8c" />
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#8589ad" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Width="20" Height="20"
+                                        CornerRadius="10"
+                                        Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center"/>
+                            </Border>
+
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="btnClose"
+                            BorderThickness="0"
+                            Content="X"
+                            Foreground="White"
+                            FontSize="16"
+                            FontFamily="Monteserrat"
+                            Cursor="Hand"
+                            Grid.Column="2"
+                            Click="BtnClose_Click">
+
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#830505"   />
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#b03c90" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Width="20" Height="20"
+                                        CornerRadius="10"
+                                        Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+            </Grid>
             
+            <Grid Grid.Row="1">
+                <TabControl x:Name="tabControl"
+                            MinHeight="500"
+                            MaxHeight="1200"
+                            MaxWidth="1800"
+                            Margin="20 30 20 30"
+                            SelectionChanged="TabControl_SelectionChanged">
+
+                    <TabItem Header="Комнаты">
+                        <DataGrid x:Name="roomGrid"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  SelectionMode="Single"
+                                  SelectionChanged="RoomGrid_SelectionChanged"
+                                  IsReadOnly="True">
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding room_class, Converter={StaticResource classConverter}}"
+                                                    Header="Тип комнаты"/>
+                                <DataGridTextColumn Binding="{Binding room_size, Converter={StaticResource sizeConverter}}"
+                                                    Header="Размер комнаты"/>
+
+                                <DataGridTemplateColumn Header="Фото комнаты"
+                                                        IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{Binding photo}"
+                                                   MaxWidth="400"
+                                                   MaxHeight="200"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTextColumn Binding="{Binding room_price, Converter={StaticResource priceConverter}}"
+                                                    Header="Цена за день"/>
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+                    <TabItem Header="Бронь">
+                        <DataGrid x:Name="reservationsGrid"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  SelectionMode="Single"
+                                  IsReadOnly="True"
+                                  SelectionChanged="ReservationsGrid_SelectionChanged">
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding reservation_id}"
+                                                    Header="id брони"
+                                                    Visibility="Collapsed"/>
+                                <DataGridTextColumn Binding="{Binding user_id}"
+                                                    Header="id пользователя"
+                                                    Visibility="Collapsed"/>
+                                <DataGridTextColumn Binding="{Binding name}"
+                                                    Header="Имя"
+                                                    Visibility="Collapsed"/>
+                                <DataGridTextColumn Binding="{Binding surname}"
+                                                    Header="Фамилия"
+                                                    Visibility="Collapsed"/>
+                                <DataGridTextColumn Binding="{Binding room_id}"
+                                                    Header="id комнаты"
+                                                    Visibility="Collapsed"/>
+                                <DataGridTextColumn Binding="{Binding room_class, Converter={StaticResource classConverter}}"
+                                                    Header="Тип комнаты"/>
+                                <DataGridTextColumn Binding="{Binding room_size, Converter={StaticResource sizeConverter}}"
+                                                    Header="Размер комнаты"/>
+
+                                <DataGridTemplateColumn Header="Фото комнаты"
+                                                        IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{Binding photo}"
+                                                   MaxWidth="400"
+                                                   MaxHeight="200"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTextColumn Binding="{Binding start_date}"
+                                                    Header="начало брони"/>
+                                <DataGridTextColumn Binding="{Binding end_date}"
+                                                    Header="конец брони"/>
+                                <DataGridTextColumn Binding="{Binding price}"
+                                                    Header="цена за день"/>
+                                <DataGridTextColumn Binding="{Binding total}"
+                                                    Header="цена за весь срок"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+
+            <Grid Grid.Row="2">
+                
+                <WrapPanel HorizontalAlignment="Center"
+                           VerticalAlignment="Center">
+                    
+                    <Button Width="100"
+                            Height="40"
+                            x:Name="BtnCancel"
+                            Content="Отменить бронь"
+                            Margin="0 0 30 0"
+                            Click="DeleteButton_Click"
+                            Visibility="Collapsed"/>
+                    <Button Width="100"
+                            Height="40"
+                            Content="Обновить"
+                            Margin="0 0 30 0"
+                            Click="UpdateButton_Click"
+                            Visibility="Collapsed"/>
+                    <Button Width="100"
+                            Height="40"
+                            Content="Удалить"
+                            Margin="0 0 30 0"
+                            Click="DeleteButton_Click"
+                            Visibility="Collapsed"/>
+
+                    <StackPanel x:Name="StackPanel_Reservation"
+                                Visibility="Collapsed">
+                        <WrapPanel>
+                            <StackPanel VerticalAlignment="Center"
+                                        HorizontalAlignment="Right"
+                                        Margin="0 0 30 0"
+                                        Visibility="Visible">
+                                <TextBlock Text="Начало"
+                                           FontWeight="Medium"/>
+
+                                <DatePicker x:Name="DatePicker_startDate"
+                                            MinWidth="180"
+                                            MaxWidth="300"
+                                            MinHeight="10"
+                                            MaxHeight="50"
+                                            Margin="0 10 0 0"
+                                            DisplayDateStart="{x:Static sys:DateTime.Now}"
+                                            FirstDayOfWeek="Monday"
+                                            CalendarOpened="DatePicker_CalendarOpened"
+                                            SelectedDateChanged="DatePicker_startDate_SelectedDateChanged"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Left"
+                                        Margin="30 0 0 0"
+                                        Visibility="Visible">
+                                <TextBlock Text="Конец"
+                                           FontWeight="Medium"/>
+                                
+                                <DatePicker x:Name="DatePicker_endDate"
+                                            MinWidth="180"
+                                            MaxWidth="300"
+                                            MinHeight="10"
+                                            MaxHeight="50"
+                                            Margin="0 10 0 0"
+                                            DisplayDateStart="{x:Static sys:DateTime.Now}"
+                                            FirstDayOfWeek="Monday"
+                                            CalendarOpened="DatePicker_CalendarOpened"
+                                            SelectedDateChanged="DatePicker_endDate_SelectedDateChanged"/>
+                            </StackPanel>
+                        </WrapPanel>
+
+                        <Button x:Name="BtnReservation"
+                                Width="100"
+                                Height="40"
+                                Content="Удалить"
+                                FontWeight="Medium"
+                                Margin="0,20,0,20"
+                                Click="BtnReservation_Click"
+                                HorizontalAlignment="Center"
+                                Visibility="Collapsed"/>
+                    </StackPanel>
+
+                </WrapPanel>
+            </Grid>
         </Grid>
 
-        <Grid Background="BlanchedAlmond" Grid.Row="1">
-
-            <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Button Width="100" Margin="0 0 30 0" Click="UpdateButton_Click">Обновить</Button>
-                <Button Width="100" Margin="0 0 30 0" Click="DeleteButton_Click">Удалить</Button>
-
-                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 30 0">
-                    <TextBlock Text="Начало"></TextBlock>
-
-                    <DatePicker x:Name="dateStart" MinWidth="180" MaxWidth="300" MinHeight="10" MaxHeight="50" Margin="0 10 0 0" DisplayDateStart="{x:Static sys:DateTime.Now}">
-
-                    </DatePicker>
-                </StackPanel>
-
-                <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="30 0 0 0">
-                    <TextBlock Text="Конец"></TextBlock>
-
-                    <DatePicker x:Name="dateEnd"  MinWidth="180" MaxWidth="300" MinHeight="10" MaxHeight="50" Margin="0 10 0 0" DisplayDateStart="{x:Static sys:DateTime.Now}">
-                    </DatePicker>
-                </StackPanel>
-            </WrapPanel>
+    </Border>
 
 
-
-
-
-
-        </Grid>
-    </Grid>
 </Window>

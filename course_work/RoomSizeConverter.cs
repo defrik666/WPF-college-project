@@ -28,7 +28,7 @@ namespace course_work
             return value;
         }
 
-        public string DbToDt(string str)
+        private string DbToDt(string str)
         {
             switch (str.Trim())
             {
@@ -43,7 +43,7 @@ namespace course_work
             }
         }
 
-        public string DtToDb(string str) 
+        private string DtToDb(string str) 
         {
             switch (str.Trim().ToLower()) 
             {

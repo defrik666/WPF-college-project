@@ -1,0 +1,88 @@
+﻿<Window x:Class="course_work.Views.OldMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:course_work.Views"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        
+        Title="MainWindow" Height="900" Width="1600" WindowStartupLocation="CenterScreen">
+
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="413*"/>
+            <ColumnDefinition Width="1187*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition MaxHeight="100"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid Background="CadetBlue" Grid.ColumnSpan="2">
+            <TabControl x:Name="tabControl" MinHeight="500" MaxHeight="1200" MaxWidth="1800" Margin="20 30 20 30" SelectionChanged="TabControl_SelectionChanged">
+                <TabItem Header="Комнаты">
+                    <DataGrid x:Name="roomGrid"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" RowBackground="#98e5fe" SelectionMode="Single" SelectionChanged="RoomGrid_SelectionChanged" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding room_class}" Header="Тип комнаты"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding room_size}" Header="Размер комнаты"></DataGridTextColumn>
+
+                            <DataGridTemplateColumn Header="Фото комнаты" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Source="{Binding photo}" MaxWidth="400" MaxHeight="200"></Image>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="Бронь">
+                    <DataGrid x:Name="reservationsGrid" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" RowBackground="#98e5fe" SelectionMode="Single" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding reservation_id}" Header="id брони"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding user_id}" Header="id пользователя"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding name}" Header="Имя"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding surname}" Header="Фамилия"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding room_id}" Header="id комнаты"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding room_class}" Header="Тип комнаты"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding room_size}"  Header="Размер комнаты"></DataGridTextColumn>
+                            <DataGridTemplateColumn Header="Фото комнаты" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Source="{Binding photo}" MaxWidth="400" MaxHeight="200"></Image>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Binding="{Binding start_date}" Header="начало брони"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding end_date}" Header="конец брони"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding price}" Header="цена за день"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding total}" Header="цена за весь срок"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+
+        <Grid Background="BlanchedAlmond" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2">
+            <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button Width="100" Margin="0 0 30 0" Click="UpdateButton_Click" Visibility="Collapsed">Обновить</Button>
+                <Button Width="100" Margin="0 0 30 0" Click="DeleteButton_Click" Visibility="Collapsed">Удалить</Button>
+
+                <StackPanel x:Name="StackPanel_StartDate" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 30 0" Visibility="Collapsed">
+                    <TextBlock Text="Начало"></TextBlock>
+
+                    <DatePicker x:Name="DatePicker_startDate" MinWidth="180" MaxWidth="300" MinHeight="10" MaxHeight="50" Margin="0 10 0 0" DisplayDateStart="{x:Static sys:DateTime.Now}" FirstDayOfWeek="Monday" CalendarOpened="DatePicker_CalendarOpened" SelectedDateChanged="DatePicker_startDate_SelectedDateChanged"></DatePicker>
+                </StackPanel>
+
+                <StackPanel x:Name="StackPanel_EndDate" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="30 0 0 0" Visibility="Collapsed">
+                    <TextBlock Text="Конец"></TextBlock>
+
+                    <DatePicker x:Name="DatePicker_endDate"  MinWidth="180" MaxWidth="300" MinHeight="10" MaxHeight="50" Margin="0 10 0 0" DisplayDateStart="{x:Static sys:DateTime.Now}"  FirstDayOfWeek="Monday" CalendarOpened="DatePicker_CalendarOpened" SelectedDateChanged="DatePicker_endDate_SelectedDateChanged"></DatePicker>
+                </StackPanel>
+            </WrapPanel>
+        </Grid>
+    </Grid>
+</Window>
