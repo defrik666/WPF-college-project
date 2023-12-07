@@ -31,6 +31,16 @@ namespace course_work
 
         }
 
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                DragMove();
+
+            }
+        }
+
+
         public void Window_Loaded(object sender, RoutedEventArgs e)
         {
             SqlConnection connection = null;
@@ -38,7 +48,7 @@ namespace course_work
             {
                 connection = new SqlConnection(connectionString);
                 adapter = new SqlDataAdapter();
-                adapter.SelectCommand = new SqlCommand("sp_SelectUsers", connection);
+                adapter.SelectCommand = new SqlCommand("sp_SelectUsersLogin", connection);
                 adapter.SelectCommand.CommandType = CommandType.StoredProcedure;
                 adapter.SelectCommand.Parameters.Add(new SqlParameter("@username", SqlDbType.NChar, 20));
             }
@@ -92,10 +102,7 @@ namespace course_work
             }
         }
 
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed) DragMove();
-        }
+
 
         private void BtnMinimize_Click(object sender, RoutedEventArgs e)
         {
@@ -106,5 +113,13 @@ namespace course_work
         {
             Application.Current.Shutdown();
         }
+
+        private void TextBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            RegestrationView regestrationView = new RegestrationView();
+            regestrationView.Show();
+            this.Close();
+        }
+
     }
 }

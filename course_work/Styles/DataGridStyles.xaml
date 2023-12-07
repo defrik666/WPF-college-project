@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style TargetType="DataGridColumnHeader"
+           x:Key="ColumnHeader">
+        <Setter Property="Background" Value="#830505" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="BorderThickness" Value="1 1 1 1"/>
+        <Setter Property="Margin" Value="-1,-1,0,0" />
+        <Setter Property="Height" Value="28" />
+        <Setter Property="Width" Value="auto"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    </Style>
+    <Style TargetType="DataGridRowHeader"
+           x:Key="RowHeader">
+        <Setter Property="Background" Value="#830505"/>
+        <Setter Property="SeparatorBrush" Value="Black"/>
+        <Setter Property="SeparatorVisibility" Value="Visible"/>
+    </Style>
+
+</ResourceDictionary>

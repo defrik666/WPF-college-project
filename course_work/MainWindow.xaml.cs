@@ -153,23 +153,23 @@ namespace course_work
 
         private void CreateReservationsAddAdapter(SqlConnection connection)
         {
-            reservationsAdapter = new SqlDataAdapter();
+            reservationsAddAdapter = new SqlDataAdapter();
 
             //Добавление SELECT команды
-            reservationsAdapter.SelectCommand = new SqlCommand("sp_SelectReservations", connection);
-            reservationsAdapter.SelectCommand.CommandType = CommandType.StoredProcedure;
+            reservationsAddAdapter.SelectCommand = new SqlCommand("sp_SelectReservations", connection);
+            reservationsAddAdapter.SelectCommand.CommandType = CommandType.StoredProcedure;
 
             //Добавление INSERT команды
-            reservationsAdapter.InsertCommand = new SqlCommand("sp_InsertReservationsUser", connection);
-            reservationsAdapter.InsertCommand.CommandType = CommandType.StoredProcedure;
-            reservationsAdapter.InsertCommand.Parameters.Add(new SqlParameter("@userId", SqlDbType.Int, 0, "user_id"));
-            reservationsAdapter.InsertCommand.Parameters.Add(new SqlParameter("@roomId", SqlDbType.Int, 0, "room_id"));
-            reservationsAdapter.InsertCommand.Parameters.Add(new SqlParameter("@startDate", SqlDbType.Date, 0, "start_date"));
-            reservationsAdapter.InsertCommand.Parameters.Add(new SqlParameter("@endDate", SqlDbType.Date, 0, "end_date"));
-            reservationsAdapter.InsertCommand.Parameters.Add(new SqlParameter("@price", SqlDbType.Decimal, 0, "price"));
-            SqlParameter par1 = reservationsAdapter.InsertCommand.Parameters.Add("@reservationId", SqlDbType.Int, 0, "reservation_id");
+            reservationsAddAdapter.InsertCommand = new SqlCommand("sp_InsertReservations", connection);
+            reservationsAddAdapter.InsertCommand.CommandType = CommandType.StoredProcedure;
+            reservationsAddAdapter.InsertCommand.Parameters.Add(new SqlParameter("@userId", SqlDbType.Int, 0, "user_id"));
+            reservationsAddAdapter.InsertCommand.Parameters.Add(new SqlParameter("@roomId", SqlDbType.Int, 0, "room_id"));
+            reservationsAddAdapter.InsertCommand.Parameters.Add(new SqlParameter("@startDate", SqlDbType.Date, 0, "start_date"));
+            reservationsAddAdapter.InsertCommand.Parameters.Add(new SqlParameter("@endDate", SqlDbType.Date, 0, "end_date"));
+            reservationsAddAdapter.InsertCommand.Parameters.Add(new SqlParameter("@price", SqlDbType.Decimal, 0, "price"));
+            SqlParameter par1 = reservationsAddAdapter.InsertCommand.Parameters.Add("@reservationId", SqlDbType.Int, 0, "reservation_id");
             par1.Direction = ParameterDirection.Output;
-            SqlParameter par2 = reservationsAdapter.InsertCommand.Parameters.Add("@total", SqlDbType.Int, 0, "total");
+            SqlParameter par2 = reservationsAddAdapter.InsertCommand.Parameters.Add("@total", SqlDbType.Int, 0, "total");
             par2.Direction = ParameterDirection.Output;
         }
 
@@ -295,9 +295,6 @@ namespace course_work
                 DatePicker_startDate.BlackoutDates.Add(new CalendarDateRange(start, end));
                 DatePicker_endDate.BlackoutDates.Add(new CalendarDateRange(start, end));
             }
-
-            //dateStart.BlackoutDates.Add(new CalendarDateRange(dateTime));
-            //dateEnd.BlackoutDates.Add(new CalendarDateRange(dateTime));
         }
 
         private void RoomGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -309,7 +306,6 @@ namespace course_work
             else if(roomGrid.SelectedItem as DataRowView == null)
             {
                 StackPanel_Reservation.Visibility = Visibility.Collapsed;
-
             }
             else
             {
@@ -333,13 +329,19 @@ namespace course_work
             {
                 BtnCancel.Visibility = Visibility.Visible;
             }
+
+
         }
 
         private void DatePicker_startDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             DatePicker_endDate.DisplayDateStart = DatePicker_startDate.SelectedDate;
 
-            if(DatePicker_endDate.SelectedDate != null)
+            if(DatePicker_endDate.SelectedDate == null)
+            {
+                BtnReservation.Visibility = Visibility.Hidden;
+            }
+            else
             {
                 BtnReservation.Visibility = Visibility.Visible;
             }
@@ -349,7 +351,11 @@ namespace course_work
         {
             DatePicker_startDate.DisplayDateEnd = DatePicker_endDate.SelectedDate;
 
-            if (DatePicker_startDate.SelectedDate != null)
+            if (DatePicker_startDate.SelectedDate == null)
+            {
+                BtnReservation.Visibility = Visibility.Hidden;
+            }
+            else
             {
                 BtnReservation.Visibility = Visibility.Visible;
             }
@@ -368,11 +374,12 @@ namespace course_work
 
             DataRowView row = roomGrid.SelectedItem as DataRowView;
             int room_id = (int)row.Row["room_id"];
-            int price = (int)row.Row["price"];
+            int price = (int)row.Row["room_price"];
             DateTime start_date = (DateTime)DatePicker_startDate.SelectedDate;
             DateTime end_date = (DateTime)DatePicker_endDate.SelectedDate;
 
-            table.Rows.Add(0, user_id, room_id,start_date,end_date,price);
+            table.Rows.Add(0, user_id, room_id,start_date,end_date,price,0);
+            reservationsAddAdapter.Update(table);
         }
     }
 }

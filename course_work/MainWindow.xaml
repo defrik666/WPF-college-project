@@ -66,70 +66,29 @@
                                Margin="10,0,0,0" />
 
                 <Button x:Name="btnMinimize"
-                            BorderThickness="0"
-                            Content="–"
-                            Foreground="White"
-                            FontSize="16"
-                            FontFamily="Monteserrat"
-                            Cursor="Hand"
-                            Grid.Column="1"
-                            Click="BtnMinimize_Click">
-
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Background" Value="#545a8c" />
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#8589ad" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Width="20" Height="20"
-                                        CornerRadius="10"
-                                        Background="{TemplateBinding Background}">
-                                <ContentPresenter VerticalAlignment="Center"
-                                                      HorizontalAlignment="Center"/>
-                            </Border>
-
-                        </ControlTemplate>
-                    </Button.Template>
+                        BorderThickness="0"
+                        Content="–"
+                        Foreground="White"
+                        FontSize="16"
+                        FontFamily="Monteserrat"
+                        Cursor="Hand"
+                        Grid.Column="1"
+                        Click="BtnMinimize_Click"
+                        Style="{DynamicResource ButtonReserve}"
+                        Template="{DynamicResource ButtonReserveTemplate}">
                 </Button>
 
                 <Button x:Name="btnClose"
-                            BorderThickness="0"
-                            Content="X"
-                            Foreground="White"
-                            FontSize="16"
-                            FontFamily="Monteserrat"
-                            Cursor="Hand"
-                            Grid.Column="2"
-                            Click="BtnClose_Click">
-
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Background" Value="#830505"   />
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#b03c90" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Width="20" Height="20"
-                                        CornerRadius="10"
-                                        Background="{TemplateBinding Background}">
-                                <ContentPresenter VerticalAlignment="Center"
-                                                      HorizontalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
+                        BorderThickness="0"
+                        Content="X"
+                        Foreground="White"
+                        FontSize="16"
+                        FontFamily="Monteserrat"
+                        Cursor="Hand"
+                        Grid.Column="2"
+                        Click="BtnClose_Click"
+                        Style="{DynamicResource ButtonClose}"
+                        Template="{DynamicResource ButtonCloseTemplate}">
                 </Button>
 
             </Grid>
@@ -140,22 +99,41 @@
                             MaxHeight="1200"
                             MaxWidth="1800"
                             Margin="20 30 20 30"
-                            SelectionChanged="TabControl_SelectionChanged">
+                            SelectionChanged="TabControl_SelectionChanged"
+                            Padding="0">
 
-                    <TabItem Header="Комнаты">
+
+                    <TabItem Header="Комнаты"
+                             Background="DarkGray"
+                             Style="{DynamicResource TabItem}">
+                         
                         <DataGrid x:Name="roomGrid"
                                   AutoGenerateColumns="False"
                                   CanUserAddRows="False"
                                   CanUserDeleteRows="False"
                                   SelectionMode="Single"
                                   SelectionChanged="RoomGrid_SelectionChanged"
-                                  IsReadOnly="True">
+                                  IsReadOnly="True"
+                                  Background="#d3c0a3"
+                                  RowBackground="#d3c0a3"
+                                  Foreground="#FF0C1359"
+                                  FontFamily="Monteserrat"
+                                  FontWeight="Medium"
+                                  FontSize="14"
+                                  ColumnHeaderStyle="{DynamicResource ColumnHeader}"
+                                  RowHeaderStyle="{DynamicResource RowHeader}">
+
+                            <DataGrid.Resources>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" 
+                                                 Color="#545a8c"/>
+                            </DataGrid.Resources>
 
                             <DataGrid.Columns>
                                 <DataGridTextColumn Binding="{Binding room_class, Converter={StaticResource classConverter}}"
                                                     Header="Тип комнаты"/>
                                 <DataGridTextColumn Binding="{Binding room_size, Converter={StaticResource sizeConverter}}"
-                                                    Header="Размер комнаты"/>
+                                                    Header="Размер комнаты">
+                                </DataGridTextColumn>
 
                                 <DataGridTemplateColumn Header="Фото комнаты"
                                                         IsReadOnly="True">
@@ -174,14 +152,29 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </TabItem>
-                    <TabItem Header="Бронь">
+                    <TabItem Header="Бронь"
+                             Background="DarkGray"
+                             Style="{DynamicResource TabItem}">
                         <DataGrid x:Name="reservationsGrid"
                                   AutoGenerateColumns="False"
                                   CanUserAddRows="False"
                                   CanUserDeleteRows="False"
                                   SelectionMode="Single"
                                   IsReadOnly="True"
-                                  SelectionChanged="ReservationsGrid_SelectionChanged">
+                                  SelectionChanged="ReservationsGrid_SelectionChanged"
+                                  Background="#d3c0a3"
+                                  RowBackground="#d3c0a3"
+                                  Foreground="#FF0C1359" 
+                                  FontFamily="Monteserrat"
+                                  FontWeight="Medium"
+                                  FontSize="14"
+                                  RowHeaderStyle="{DynamicResource RowHeader}"
+                                  ColumnHeaderStyle="{DynamicResource ColumnHeader}">
+
+                            <DataGrid.Resources>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" 
+                                                 Color="#545a8c"/>
+                            </DataGrid.Resources>
 
                             <DataGrid.Columns>
                                 <DataGridTextColumn Binding="{Binding reservation_id}"
@@ -219,9 +212,9 @@
                                                     Header="начало брони"/>
                                 <DataGridTextColumn Binding="{Binding end_date}"
                                                     Header="конец брони"/>
-                                <DataGridTextColumn Binding="{Binding price}"
+                                <DataGridTextColumn Binding="{Binding price, Converter={StaticResource priceConverter}}"
                                                     Header="цена за день"/>
-                                <DataGridTextColumn Binding="{Binding total}"
+                                <DataGridTextColumn Binding="{Binding total, Converter={StaticResource priceConverter}}"
                                                     Header="цена за весь срок"/>
                             </DataGrid.Columns>
                         </DataGrid>
@@ -230,17 +223,15 @@
             </Grid>
 
             <Grid Grid.Row="2">
-                
                 <WrapPanel HorizontalAlignment="Center"
                            VerticalAlignment="Center">
                     
-                    <Button Width="100"
-                            Height="40"
-                            x:Name="BtnCancel"
+                    <Button x:Name="BtnCancel"
                             Content="Отменить бронь"
-                            Margin="0 0 30 0"
                             Click="DeleteButton_Click"
-                            Visibility="Collapsed"/>
+                            Visibility="Collapsed"
+                            Style="{DynamicResource ButtonClose}"
+                            Template="{DynamicResource ButtonLoginTemplate}"/>
                     <Button Width="100"
                             Height="40"
                             Content="Обновить"
@@ -255,7 +246,7 @@
                             Visibility="Collapsed"/>
 
                     <StackPanel x:Name="StackPanel_Reservation"
-                                Visibility="Collapsed">
+                                Visibility="Visible">
                         <WrapPanel>
                             <StackPanel VerticalAlignment="Center"
                                         HorizontalAlignment="Right"
@@ -298,14 +289,13 @@
                         </WrapPanel>
 
                         <Button x:Name="BtnReservation"
-                                Width="100"
-                                Height="40"
-                                Content="Удалить"
-                                FontWeight="Medium"
+                                Content="Забронировать"
                                 Margin="0,20,0,20"
                                 Click="BtnReservation_Click"
                                 HorizontalAlignment="Center"
-                                Visibility="Collapsed"/>
+                                Visibility="Visible"
+                                Style="{DynamicResource ButtonMinimize}"
+                                Template="{DynamicResource ButtonLoginTemplate}"/>
                     </StackPanel>
 
                 </WrapPanel>
